@@ -2,6 +2,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
+
 const SYMBOL_list = require('./symbols.js');
 const symbolList = SYMBOL_list.symbolList();
 
