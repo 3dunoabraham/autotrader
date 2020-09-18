@@ -47,6 +47,7 @@ for (var i = 0; i < tradeTokenList.children.length; i++)
 
 let inputFormGroup = {
   tradePrice: document.getElementById('input-tradePrice'),
+  tradePNL: document.getElementById('input-tradePNL'),
 };
 
 let tradeEvent = (event) =>
@@ -66,12 +67,15 @@ let tradeEvent = (event) =>
   }
   if (withPNLCheckbox.checked)
   {
-    pnl = ".2:.1";
+    pnl = inputFormGroup.tradePNL.value;
   } else {
     pnl = "";
   }
   
   var myArgs = ["futures",side,symbol,"1",price,pnl];
+
+  tradeMsg.innerHTML = "";
+  ordersMsg.innerHTML = "";
 
   let autoTraderResponse = getAutoTrader(myArgs);
 
@@ -297,7 +301,7 @@ function getAutoTrader(myArgs)
         {
           if (!isFinite(pnl[0]) || !isFinite(pnl[1]))
           {
-            console.log("Invalid profit and loss: ", pnlString); return {success:false,msg:"Invalid profit and"}
+            console.log("Invalid profit and loss: ", pnlString); return {success:false,msg:"Invalid profit and loss"}
             return;
           }
         } else {
