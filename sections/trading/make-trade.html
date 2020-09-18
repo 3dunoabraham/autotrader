@@ -1,0 +1,115 @@
+<template class="task-template">
+  <section id="make-trade-section" class="section js-section u-category-trading">
+    <!-- <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          Trading
+        </h1>
+
+        <p>Go to <a href="https://www.binance.com/en/futures/ref/46917797">Binance (futures)</a> in your browser.</p>
+      </div>
+    </header> -->
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <h1>
+          <i class="fa fa-handshake"></i>
+          Make Trade
+        </h1>
+        <hr>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <br>
+        <div class="row">
+          <div class="col-xs-12 col-md">
+            <h1>
+              <div class="demo-controls" style="display: flex; flex-direction: column; justify-content: center;">
+                <span class="" style="">Price</span>
+                <span class="demo-meta">Leave blank for market price.</span>
+                <div style="display:block; ; width: 75%; position: relative;" >
+                  <input type="text" name="tradePrice" id="input-tradePrice" class="demo-input inputGroup-input" style="flex: 1; width: 100%">
+                  <!-- <input type="text" name="trade-quantity" class="demo-input" style="flex: 1;"> -->
+                </div>
+              </div>
+            </h1>
+            <h1>
+              <div class="demo-controls" style="display: flex; flex-direction: column; justify-content: center;">
+                <span class="" style="">Amount</span>
+                <span class="demo-meta">Leave blank for $1.</span>
+                <div style="display:block; ; width: 75%; position: relative;" >
+                  <input type="text" name="trade-quantity" class="demo-input" style="flex: 1; width: 100%">
+                  <!-- <input type="text" name="trade-quantity" class="demo-input" style="flex: 1;"> -->
+                </div>
+              </div>
+            </h1>
+            <div style="display: flex; flex-wrap: wrap;">
+              <button id="print-pdf-demo-toggle" class="js-container-target demo-toggle-button" style="flex: 1; ">
+                Settings
+                <div class="demo-meta u-avoid-clicks">Profit, Loss, Market | Current: [value]</div>
+              </button>
+              <div class="demo-box">
+                <p>Advanced <code>Settings</code></p>
+                
+                <div class="demo-controls" style="display: flex; flex-direction: row; justify-content: flex-start;">
+                  <input type="checkbox" name="" checked id="trade-execute-makeTrade">
+                  <label for="trade-execute-makeTrade">Make trade at price.</label>
+                </div>
+                <div class="demo-controls" style="display: flex; flex-direction: row; justify-content: flex-start;">
+                  <input type="checkbox" name="" id="trade-execute-confirm">
+                  <label for="trade-execute-confirm" style="color: red">Check to confirm and send.</label>
+                </div>
+                <!-- <div class="demo-controls">
+                  <button class="demo-button" id="save-settings">Save</button>
+                  <span class="demo-response is-selectable" id="label-trade-msg"></span>
+                </div> -->
+              </div>
+            </div>
+            <br>
+            <div class="row center-xs">
+                <h2 class="col-6">
+                  <div class="demo-button color-green border-green no-wrap" id="trade-execute-buy" data-side="buy">
+                    <i class="fa fa-xs fa-arrow-up mr-1"></i>
+                    <span>Buy</span>
+                  </div>
+                </h2>
+                <h2 class="col-6">
+                  <div class="demo-button color-red border-red no-wrap" id="trade-execute-sell" data-side="sell">
+                    <i class="fa fa-xs fa-arrow-down mr-1"></i>
+                    <span>Sell</span>
+                  </div>
+                </h2>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-md-7">
+            <h1 class="mb-2">
+              <div class="demo-controls" style="display: flex; flex-direction: column; justify-content: center;">
+                <span class="">Result</span>
+              </div>
+            </h1>
+            <div class="px-0">
+              <div style="box-shadow:  0 -3px 6px 0px rgba(0,0,0,.075); padding: 30px">
+                <span style="background: yellow" id="trade-info-msg"></span>
+                <span style="display: flex; justify-content: start; flex-direction: column; align-items: center;" id="trade-input-msg">
+                  <p>Waiting for trade...</p>
+                  <i style="opacity: .15; filter: invert(100%)" class="fas demo-meta fa-8x fa-circle-notch  fa-spin"></i>
+                </span>
+                <span style="background: red" id="trade-orders-msg"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span id="trade-execute-msg" style="display: none"></span>
+      </div>
+    </div>
+
+
+    <script type="text/javascript">
+      require('./renderer-process/trading/make-trade')
+    </script>
+
+  </section>
+</template>

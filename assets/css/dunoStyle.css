@@ -1,0 +1,26 @@
+.color-green {
+	color: rgb(46, 189, 133) !important;
+}
+.color-red {
+	color: rgb(224, 41, 74) !important;
+}
+.border-red {
+	border-color: rgba(224, 41, 74,.25) !important;
+}
+.border-red:hover {
+	border-color: rgba(224, 41, 74,1) !important;
+}
+.border-green {
+	border-color: rgba(46, 189, 133,.25) !important;
+}
+.border-green:hover {
+	border-color: rgba(46, 189, 133,1) !important;
+}
+
+.no-wrap {
+	white-space: nowrap !important;
+}
+
+@media (min-width: 940px) {
+
+}
