@@ -22,6 +22,28 @@ const ordersMsg = document.getElementById('trade-orders-msg')
 
 const confirmTradeCheckbox = document.getElementById('trade-execute-confirm');
 const makeTradeCheckbox = document.getElementById('trade-execute-makeTrade');
+const withPNLCheckbox = document.getElementById('trade-execute-withPNL');
+
+let symbol = "btcusdt";
+const tradeTokenList = document.getElementById('trade-tokens');
+
+let tokenEvent = (event) =>
+{
+  let token = event.currentTarget.dataset.token;
+  const activeTokenDom = document.getElementsByClassName('active-token');
+  for (var i = 0; i < activeTokenDom.length; i++)
+  {
+    activeTokenDom[i].className = activeTokenDom[i].className.replace("active-token", "");
+  }
+  const tokenDom = document.getElementById('token-'+token);
+  tokenDom.className += " active-token";
+  symbol = token+"usdt";
+};
+
+for (var i = 0; i < tradeTokenList.children.length; i++)
+{
+  tradeTokenList.children[i].children[0].addEventListener('click', tokenEvent);
+}
 
 let inputFormGroup = {
   tradePrice: document.getElementById('input-tradePrice'),
@@ -33,18 +55,23 @@ let tradeEvent = (event) =>
 
   let exchange = "futures";
   let side = event.currentTarget.dataset.side;
-  let symbol = "btcusdt";
   let quantity = "1";
   let price = "";
+  let pnl = "";
   if (inputFormGroup.tradePrice.value.length)
   {
     price = "@" + inputFormGroup.tradePrice.value + (makeTradeCheckbox.checked ? "" : "*");
   } else {
     price = "@market" + (makeTradeCheckbox.checked ? "" : "*");
   }
-  let pnl = ".2:.1";
+  if (withPNLCheckbox.checked)
+  {
+    pnl = ".2:.1";
+  } else {
+    pnl = "";
+  }
   
-  var myArgs = ["futures",side,"btcusdt","1",price,".2:.1"];
+  var myArgs = ["futures",side,symbol,"1",price,pnl];
 
   let autoTraderResponse = getAutoTrader(myArgs);
 
@@ -121,20 +148,36 @@ let tradeEvent = (event) =>
     }
     ordersMsg.innerHTML += "</ul>";
 
-    tradeMsg.innerHTML = `<div style="display:flex; padding: 0 20px">
-      <span style="width: 50px">profit:</span
-      ><span style="flex:1">${data.pnl.profitPrice}</span> <span>${data.pnl.profitAmount}</span></div>`;
+    tradeMsg.innerHTML = "";
+    if (withPNLCheckbox.checked)
+    {
+      tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
+        <span style="width: 50px">profit:</span
+        ><span style="flex:1">${data.pnl.profitPrice}</span> <span>${data.pnl.profitAmount}</span></div>`;
+    } else {
+      tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
+        <span style="width: 50px">profit:</span><span style="flex:1">-</span><span>-</span></div>`
+    }
+
     if (makeTradeCheckbox.checked)
     {
       tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
         <span style="width: 50px">trade:</span
         ><span style="flex:1">${data.pnl.tradePrice}</span> <span>-</span></div>`;
     } else {
-      tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px"><span style="width: 50px">trade:</span><span>-</span></div>`
+      tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
+        <span style="width: 50px">trade:</span><span style="flex:1">-</span><span>-</span></div>`
     }
-    tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
-      <span style="width: 50px">loss:</span
-      ><span style="flex:1">${data.pnl.lossPrice}</span> <span>${data.pnl.lossAmount}</span></div>`;
+
+    if (withPNLCheckbox.checked)
+    {
+      tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
+        <span style="width: 50px">loss:</span
+        ><span style="flex:1">${data.pnl.lossPrice}</span> <span>${data.pnl.lossAmount}</span></div>`;
+    } else {
+      tradeMsg.innerHTML += `<div style="display:flex; padding: 0 20px">
+        <span style="width: 50px">loss:</span><span style="flex:1">-</span><span>-</span></div>`
+    }
 
     // pnlMsg.innerHTML = "<h2>PNL ANALYSIS</h2>";
     // pnlMsg.innerHTML += "<ul>";

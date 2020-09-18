@@ -16,11 +16,26 @@
 .border-green:hover {
 	border-color: rgba(46, 189, 133,1) !important;
 }
+.border-gray {
+	border-color: rgba(0, 0, 0,.15) !important;
+}
+.border-gray:hover {
+	border-color: rgba(0, 0, 0,.75) !important;
+}
+.active-token {
+	border-color: rgba(0, 0, 0,.75) !important;
+}
+
+.w-100 {
+	width: 100%;
+}
 
 .no-wrap {
 	white-space: nowrap !important;
 }
-
+.txt-sm {
+	font-size: .8em;
+}
 @media (min-width: 940px) {
 
 }

@@ -10,18 +10,31 @@
       </div>
     </header> -->
 
-    <div class="demo">
-      <div class="demo-wrapper">
-        <h1>
+    <div class="demo mb-0 pb-0">
+      <div class="demo-wrapper mb-0 pb-0">
+        <h1 class="mb-0 pb-0">
           <i class="fa fa-handshake"></i>
           Make Trade
         </h1>
+
         <hr>
       </div>
     </div>
 
-    <div class="demo">
+    <div class="demo mt-4">
       <div class="demo-wrapper">
+
+        <div class="row center-xs middle w-100" id="trade-tokens">
+          <div class="col">
+            <small data-token="btc" id="token-btc" class="demo-button border-gray px-2 txt-sm active-token">BTC</small>
+          </div>
+          <div class="col">
+            <small data-token="eth" id="token-eth" class="demo-button border-gray px-2 txt-sm">ETH</small>
+          </div>
+          <div class="col">
+            <small data-token="yfi" id="token-yfi" class="demo-button border-gray px-2 txt-sm">YFI</small>
+          </div>
+        </div>
         <br>
         <div class="row">
           <div class="col-xs-12 col-md">
@@ -57,6 +70,11 @@
                   <input type="checkbox" name="" checked id="trade-execute-makeTrade">
                   <label for="trade-execute-makeTrade">Make trade at price.</label>
                 </div>
+                <div class="demo-controls" style="display: flex; flex-direction: row; justify-content: flex-start;">
+                  <input type="checkbox" name="" checked id="trade-execute-withPNL">
+                  <label for="trade-execute-withPNL">Set profit and loss.</label>
+                </div>
+                <hr>
                 <div class="demo-controls" style="display: flex; flex-direction: row; justify-content: flex-start;">
                   <input type="checkbox" name="" id="trade-execute-confirm">
                   <label for="trade-execute-confirm" style="color: red">Check to confirm and send.</label>
