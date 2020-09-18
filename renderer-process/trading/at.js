@@ -1,5 +1,5 @@
 const SYMBOL_list = require('./symbols.js');
-const keySet = require('./keySet.js');
+const keySet = require('./keySet/keySet.js');
 const symbolList = SYMBOL_list.symbolList();
 
 const crypto = require('crypto');
