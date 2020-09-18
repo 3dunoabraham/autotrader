@@ -46,6 +46,7 @@ for (var i = 0; i < tradeTokenList.children.length; i++)
 }
 
 let inputFormGroup = {
+  tradeAmount: document.getElementById('input-tradeAmount'),
   tradePrice: document.getElementById('input-tradePrice'),
   tradePNL: document.getElementById('input-tradePNL'),
 };
@@ -53,12 +54,18 @@ let inputFormGroup = {
 let tradeEvent = (event) =>
 {
   // EXAMPLE REQUEST
+  let quantity = "";
+  let price = "";
+  let pnl = "";
 
   let exchange = "futures";
   let side = event.currentTarget.dataset.side;
-  let quantity = "1";
-  let price = "";
-  let pnl = "";
+  if (inputFormGroup.tradeAmount.value.length)
+  {
+    quantity = inputFormGroup.tradeAmount.value;
+  } else {
+    quantity = "1";
+  }
   if (inputFormGroup.tradePrice.value.length)
   {
     price = "@" + inputFormGroup.tradePrice.value + (makeTradeCheckbox.checked ? "" : "*");
@@ -72,7 +79,7 @@ let tradeEvent = (event) =>
     pnl = "";
   }
   
-  var myArgs = ["futures",side,symbol,"1",price,pnl];
+  var myArgs = ["futures",side,symbol,quantity,price,pnl];
 
   tradeMsg.innerHTML = "";
   ordersMsg.innerHTML = "";
