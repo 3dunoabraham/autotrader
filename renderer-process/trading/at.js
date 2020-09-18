@@ -1,4 +1,5 @@
 const SYMBOL_list = require('./symbols.js');
+const keySet = require('./keySet.js');
 const symbolList = SYMBOL_list.symbolList();
 
 const crypto = require('crypto');
@@ -24,10 +25,7 @@ module.exports = class AutoTrader {
 			},
 		};
 
-		this.keys = {
-			"akey" : "piZRjuGuyuIv92TPzcSmtpdFBXNfBqvnBB1Dq2ilK8ST3X6v7RfMOANhoLbqCxPj",
-			"skey" : "d6LtaHmplERpe1N8iI3WEDauL548BGbFIkI6uLfOOqGjfbFs6oiJ4mfO2rcOzohH",
-		};
+		this.keys = keySet.keySet();
 
 		this.theRequest = {};
 

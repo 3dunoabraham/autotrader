@@ -460,6 +460,15 @@ module.exports = {
 								{"stepSize":"1","maxQty":"515411","minQty":"1"}
 							],
 						},
+			"UNIUSDT": {
+							"baseAsset":"UNI","pricePrecision":4,"quantityPrecision":0,"maxLeverage":75,
+							"filters":
+							[
+								{"minPrice":"0.0001","maxPrice":"100","tickSize":"0.0001"},
+								{"stepSize":"1","maxQty":"10000000","minQty":"1"},
+								{"stepSize":"1","maxQty":"515411","minQty":"1"}
+							],
+						},
 		};
 	}
 }
