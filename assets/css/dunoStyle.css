@@ -16,6 +16,12 @@
 .border-green:hover {
 	border-color: rgba(46, 189, 133,1) !important;
 }
+.border-gold {
+	border-color: rgba(189, 133, 46,.25) !important;
+}
+.border-gold:hover {
+	border-color: rgba(189, 133, 46,.75) !important;
+}
 .border-gray {
 	border-color: rgba(0, 0, 0,.15) !important;
 }
@@ -35,6 +41,28 @@
 }
 .txt-sm {
 	font-size: .8em;
+}
+.txt-center {
+	text-align: center;
+}
+.txt-left {
+	text-align: left;
+}
+.txt-right {
+	text-align: right;
+}
+
+.mt-shadow {
+	box-shadow:  0 -3px 6px 0px rgba(0,0,0,.075);
+}
+.mt-border {
+	border-radius: 5px;
+}
+.transparentful {
+	opacity: .15;
+}
+.transparent {
+	opacity: .25;
 }
 @media (min-width: 940px) {
 

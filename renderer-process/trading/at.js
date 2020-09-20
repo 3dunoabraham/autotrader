@@ -21,7 +21,7 @@ module.exports = class AutoTrader {
 				batchOrder : "/fapi/v1/batchOrders",
 				price : "/fapi/v1/ticker/bookTicker",
 				leverage : "/fapi/v1/leverage",
-				orders : "/fapi/v1/order",
+				orders : "/fapi/v1/openOrders",
 			},
 		};
 
@@ -49,6 +49,16 @@ module.exports = class AutoTrader {
 		};
 
 		this.query = {
+			price(exchange, symbol)
+			{
+				let priceRequest = new XMLHttpRequest();	
+				let baseUrl = self.urls[exchange].baseUrl;
+				let priceEndPoint = self.urls[exchange].price;
+				let priceUrl = baseUrl + priceEndPoint + "?symbol="+ symbol;
+				priceRequest.open("GET", priceUrl, true);
+
+				return priceRequest;
+			},
 			orders(exchange)
 			{
 				let baseUrl = self.urls[exchange].baseUrl;
@@ -135,11 +145,149 @@ module.exports = class AutoTrader {
 				priceRequest.send();
 				return priceRequest;
 			},
+			getTradePriceRequest(exchange, symbol, dataQueryString)
+			{
+				let baseUrl = self.urls[exchange].baseUrl;
+				let priceEndPoint = self.urls[exchange].price;
+
+				let priceRequest = new XMLHttpRequest();	
+				let priceUrl = baseUrl + priceEndPoint + "?symbol="+ symbol;
+
+				let response = (response) =>{
+					let newBaseUrl = self.urls[exchange].baseUrl;
+					let endPoint = self.urls[exchange].batchOrder;
+
+					let signedRequestUrl = self.signRequest(newBaseUrl, endPoint, dataQueryString);
+
+					return {
+						signedRequestUrl: signedRequestUrl,
+					};
+				};
+
+				priceRequest.onload = response;
+				priceRequest.open("GET", priceUrl, true);
+				return {
+					priceRequest: priceRequest,
+				};
+			},
 
 		}
 
 		this.payload =
 		{
+			// SYMBOL must be in uppercase and exist in symbolList 
+			// SIDE must be in uppercase and be "BUY" or "SELL"
+			// TIMEINFORCE must be in uppercase and be "GTC"
+			// QUANTITY must be a number
+			// PRICE must be a number
+			// STOPPRICE must be a number
+			// REDUCEONLY must be a number
+			getOrder(	symbol = null,
+						side = null,
+						type = null,
+						timeInForce = null,
+						quantity = null,
+						price = null,
+						stopPrice = null,
+						reduceOnly = null,
+						)
+			{
+				let returnObject = {};
+
+				if (symbol != null) 		returnObject["symbol"] = symbol;
+				if (side != null) 			returnObject["side"] = side;
+				if (type != null) 			returnObject["type"] = type;
+				if (timeInForce != null) 	returnObject["timeInForce"] = timeInForce;
+				if (quantity != null) 		returnObject["quantity"] = quantity;
+				if (price != null) 			returnObject["price"] = price;
+				if (stopPrice != null) 		returnObject["stopPrice"] = stopPrice;
+				if (reduceOnly != null) 	returnObject["reduceOnly"] = reduceOnly;
+
+				return returnObject;
+			},
+			trade(symbol, side, quantity, price, leverage = 50, pnl, force, makeTrade)
+			{
+				let symbolValue = symbol.toUpperCase();
+				let timeInForce = "GTC";
+
+				let SYMBOL = symbol.toUpperCase(); // ***
+				let SIDE = side.toUpperCase(); // ***
+				let TIMEINFORCE = "GTC"; // ***
+
+				let priceValue = parseFloat(price);
+				let quantityValue = parseFloat(quantity) * leverage / priceValue;
+				let QUANTITY = parseFloat(quantityValue).toFixed(symbolList[symbolValue].quantityPrecision); // ***
+
+				let hasProfit = pnl.length && !!parseFloat(pnl[0]); // ***
+				let valueProfit = (priceValue / (100 / parseFloat(pnl[0])) * (side == "BUY" ? 1 : -1) );
+				let profitAmount = valueProfit.toFixed(symbolList[symbolValue].pricePrecision); // ***
+
+				let hasLoss = pnl.length && !!parseFloat(pnl[1]); // ***
+				let valueLoss = (priceValue / (100 / parseFloat(pnl[1])) * (side == "BUY" ? -1 : 1) );
+				let lossAmount = valueLoss.toFixed(symbolList[symbolValue].pricePrecision); // ***
+
+				let PRICE = force == "MARKET" ? "MARKET" : priceValue.toFixed(symbolList[symbolValue].pricePrecision);
+				let bidPrice = priceValue.toFixed(symbolList[symbolValue].pricePrecision); // ***
+				let STOPPRICE = {};
+
+				let REDUCEONLY = false;
+
+				let order = {};
+
+				let payload = [];
+
+				if (makeTrade)
+				{
+					if (force == "MARKET")
+					{
+						payload.push(self.payload.getOrder(SYMBOL, SIDE, "MARKET", TIMEINFORCE, QUANTITY, null, null, null));
+					} else {
+						payload.push(self.payload.getOrder(SYMBOL, SIDE, "LIMIT", TIMEINFORCE, QUANTITY, PRICE, null, null));
+					}
+				}
+
+				SIDE = side == "BUY" ? "SELL" : "BUY";
+
+				PRICE = (priceValue + valueProfit).toFixed(symbolList[symbolValue].pricePrecision);
+				let profitPrice =  PRICE; // ***
+				STOPPRICE = (priceValue + valueProfit + (priceValue / 4000 * (side == "BUY" ? 1 : -1) )).toFixed(symbolList[symbolValue].pricePrecision);
+				hasProfit && payload.push(self.payload.getOrder(SYMBOL, SIDE, "TAKE_PROFIT", TIMEINFORCE, QUANTITY, PRICE, STOPPRICE, "true"));
+
+				PRICE = (priceValue + valueLoss).toFixed(symbolList[symbolValue].pricePrecision);
+				let lossPrice =  PRICE; // ***
+				STOPPRICE = (priceValue + valueLoss + (priceValue / 4000 * (side == "BUY" ? 1 : -1) )).toFixed(symbolList[symbolValue].pricePrecision);
+				hasLoss && payload.push(self.payload.getOrder(SYMBOL, SIDE, "STOP", TIMEINFORCE, QUANTITY, PRICE, STOPPRICE, "true"));
+
+				let dataQueryString = `batchOrders=`+encodeURIComponent(JSON.stringify(payload)).replace('%27', '%22');
+
+				return {
+					dataQueryString:  dataQueryString,
+					payload: payload,
+					data: {
+						symbol: SYMBOL,
+						side: SIDE,
+						timeinforce: TIMEINFORCE,
+						quantity: QUANTITY,
+						bidPrice: bidPrice,
+
+						hasProfit: hasProfit,
+						profitPrice: profitPrice,
+						profitAmount: profitAmount,
+						profitPercent: parseFloat(pnl[0]),
+						profitBalance: parseFloat(quantity) * parseFloat(pnl[0]),
+						// profitBalance: (parseFloat(pnl[0]) / 100) * parseFloat(bidPrice),
+						// profitValue: parseFloat(bidPrice) * profitPercent;
+
+						hasLoss: hasLoss,
+						lossPrice: lossPrice,
+						lossAmount: lossAmount,
+						lossPercent: parseFloat(pnl[1]),
+						lossBalance: parseFloat(quantity) * parseFloat(pnl[1]),
+						// lossBalance: (parseFloat(pnl[1]) / 100) * parseFloat(bidPrice),
+						// profitValue: parseFloat(bidPrice) * lossPercent;
+					},
+				}
+			},
 			tradeAtMarket(symbol, side, quantity, price, pnl, force, makeTrade)
 			{
 				let symbolValue = symbol.toUpperCase();
@@ -233,11 +381,13 @@ module.exports = class AutoTrader {
 					pnl: {
 						hasProfit: hasProfit,
 						profitPrice: (priceValue + valueProfit).toFixed(symbolList[symbolValue].pricePrecision),
-						profitAmount: "("+valueProfit.toFixed(symbolList[symbolValue].pricePrecision)+")",
+						profitAmount: valueProfit.toFixed(symbolList[symbolValue].pricePrecision),
+						profitPercent: pnl[0],
 						makeTrade: makeTrade,
 						tradePrice: priceValue.toFixed(symbolList[symbolValue].pricePrecision),
 						lossPrice: (priceValue + valueLoss).toFixed(symbolList[symbolValue].pricePrecision),
-						lossAmount: "("+valueLoss.toFixed(symbolList[symbolValue].pricePrecision)+")",
+						lossAmount: valueLoss.toFixed(symbolList[symbolValue].pricePrecision),
+						lossPercent: pnl[1],
 						hasLoss: hasLoss,
 						priceValue: priceValue,
 						price: price,
