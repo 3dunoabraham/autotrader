@@ -10,59 +10,116 @@ const crypto = require('crypto');
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 // ************** IMPORTS END ************** 
-
-const getOrdersButton = document.getElementById('order-list-refresh')
-const orderList = document.getElementById('order-list')
-
-getOrdersButton.addEventListener('click', (event) =>
-{
-  let autoTrader = new AutoTrader({},{});
-  let data = autoTrader.query.orders("futures");
- 
-  let TheRequest = autoTrader.getTheRequest("post", data.signedRequestUrl);
-    orderList.innerHTML += "<p>response:"+data.signedRequestUrl+"</p>";
-  TheRequest.onload = () => {
-    orderList.innerHTML += "<p>response:"+"</p>";
-    orderList.innerHTML += "<p>"+TheRequest.responseText+"</p>";
-    orderList.innerHTML += "<p>"+Object.keys(JSON.parse(TheRequest.responseText))+"</p>";
-  };
-  TheRequest.send();
-  return;
-
-
-  let newOrdersRequest = response.ordersRequest;
-  let onLoadFunction = newOrdersRequest.onload;
-
-  newOrdersRequest.onload = () =>
+class getOrdersController {
+  constructor($container, options = null, data = null)
   {
-    let data = onLoadFunction(newOrdersRequest.responseText);
-    
-    tradeExecuteMsg.innerHTML += `<pre>responseText: <code class="language-bash">${newOrdersRequest.responseText}</code></pre>`;
-    tradeExecuteMsg.innerHTML += "<br>";
+    this.$container = document.getElementById($container);
 
-    // tradeExecuteMsg.innerHTML += `<pre>signedRequestUrl: <code class="language-bash">${data.signedRequestUrl}</code></pre>`;
+    this.options = Object.assign({
+    }, options);
 
-    for (var i = 0; i < data.payload.length; i++)
+    this.data = Object.assign({
+    }, data);
+
+    this.$table = document.getElementById("order-list");
+
+    let self = this;
+
+    this.autoTrader = new AutoTrader({
+      "lastArgument": "?",
+    },{});
+
+    this.requests =
     {
-      if (!Object.keys(data.payload[i]))
+    };
+    this.updaters =
+    {
+    };
+    this.watchers =
+    {
+    };
+    this.clickers =
+    {
+      testEvent(event = null)
       {
-        ordersMsg.innerHTML +=  `<li>Order N°${i} - </li>`;
-      } else {
-        ordersMsg.innerHTML +=  `<li>Order N°${i} `;
+        alert();
+      },
+      refreshList(event = null)
+      {
+        let signedRequestUrl = self.autoTrader.query.orders("futures").signedRequestUrl;
+        self.$table.innerHTML = '<span class="col-xs-12 txt-center"><i class="fas transparentful demo-meta fa-8x fa-circle-notch  fa-spin"></i></span>';
 
-        ordersMsg.innerHTML += `${data.payload[i].side} (${data.payload[i].quantity}) ${data.payload[i].symbol} </li>`;
+        let TheRequest = self.autoTrader.getTheRequest("get", signedRequestUrl);
 
-        // tradeExecuteMsg.innerHTML += "<ul>";
-        // tradeExecuteMsg.innerHTML += "<li>type: "+data.payload[i].type+"</li>";
-        // tradeExecuteMsg.innerHTML += "<li>side: "+data.payload[i].side+"</li>";
-        // tradeExecuteMsg.innerHTML += "<li>symbol: "+data.payload[i].symbol+"</li>";
-        // tradeExecuteMsg.innerHTML += "<li>quantity: "+data.payload[i].quantity+"</li>";
-        // tradeExecuteMsg.innerHTML += "<li>price: "+data.payload[i].price+"</li>";
-        // tradeExecuteMsg.innerHTML += "</ul>";
+        TheRequest.onload = () => {
+          let responseArray = JSON.parse(TheRequest.responseText);
+
+          self.$table.innerHTML = "";
+          for (var i = 0; i < responseArray.length; i++)
+          {
+            self.$table.innerHTML += "<div class='col-xs-12 row'>";
+            self.$table.innerHTML += "<span class='col-xs'>"+responseArray[i].type+"</span>";
+            self.$table.innerHTML += "<span class='col-xs'>"+responseArray[i].symbol+"</span>";
+            self.$table.innerHTML += "<span class='col-xs'>"+responseArray[i].side+"</span>";
+            self.$table.innerHTML += "<span class='col-xs'>"+responseArray[i].price+"</span>";
+            self.$table.innerHTML += "<span class='col-xs'>"+responseArray[i].stopPrice+"</span>";
+            self.$table.innerHTML += "<span class='col-xs'>"+responseArray[i].reduceOnly+"</span>";
+            self.$table.innerHTML += "</div>";
+
+            let deleteButton = document.createElement("button");
+            deleteButton.dataset.id = responseArray[i].orderId;
+            // deleteButton.dataset.id = Object.keys(responseArray[i]);
+            deleteButton.innerHTML = "x";
+            deleteButton.addEventListener("click", (e) => {
+              let cancelTradeRequest = self.autoTrader.requests.getCancelTradeRequest(deleteButton.dataset.id)
+              let localOnloadReponse = cancelTradeRequest.cancelRequestRequest.onload;
+
+              self.$table.innerHTML += "<span class='col-xs-12'>"+(cancelTradeRequest.cancelRequestUrl)+"</span>";
+
+              let response = () => {
+                self.$table.innerHTML += "<span class='col-xs-12'>"+(cancelTradeRequest.cancelRequestRequest.responseText)+"</span>";
+                deleteButton.innerHTML = cancelTradeRequest.cancelRequestRequest.status;
+              };
+
+              cancelTradeRequest.cancelRequestRequest.onload = response;
+
+              cancelTradeRequest.cancelRequestRequest.send();
+            })
+            self.$table.appendChild(deleteButton)
+          }
+
+          self.autoTrader = new AutoTrader({"lastArgument": "?",},{});
+        };
+        
+        TheRequest.send();
+
       }
+    };
+
+    this.initListeners();
+    // this.clickers.refreshList();
+  }
+  initListeners()
+  {
+    let self = this;
+
+    var watchers = document.getElementsByClassName("data-watcher");
+    for (var i = 0; i < watchers.length; i++) {
+       watchers[i].addEventListener('change', (event) =>
+       {
+         self.watchers[event.currentTarget.dataset.watch](event);
+       });
     }
 
-    // autoTrader.send(signedRequestUrl);
-  };
-  // newOrdersRequest.send();
-})
+    var clickers = document.getElementsByClassName("data-clicker");
+    for (var i = 0; i < clickers.length; i++) {
+       clickers[i].addEventListener("click", (event) => {
+         self.clickers[event.currentTarget.dataset.click](event);
+       });
+    }
+  }
+}
+
+
+let $makeTrade = new getOrdersController('get-orders-section', {}, {
+});

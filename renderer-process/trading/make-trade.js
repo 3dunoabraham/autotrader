@@ -81,6 +81,7 @@ class makeTradeController {
       cardTrade(event = null)
       {
         self.formCard.side.innerHTML = '<i class="demo-meta fa fa-2x fa-arrow-'+ (self.form.side == 'BUY' ? 'up color-green' : 'down color-red') +'"></i>';
+
         let price = self.form.price.value.length ? self.form.price.value : self.data.lastPrice[self.form.symbol];
         let tradeResponse = self.autoTrader.payload.trade(
             self.form.symbol,
@@ -219,7 +220,8 @@ class makeTradeController {
           {
             self.formCard.info.innerHTML +=  `<p class="my-0">Order N°${i}: - </p>`;
           } else {
-            self.formCard.info.innerHTML +=  `<p class="my-0">Order N°${i}: ${self.data.lastPayload[i].side} (${self.data.lastPayload[i].quantity}) ${self.data.lastPayload[i].symbol} ${self.data.lastPayload[i].price ? self.data.lastPayload[i].price : "data.pnl.tradePrice"} ${self.data.lastPayload[i].reduceOnly ? "[reduceOnly]" : ""}</p>`;
+            self.formCard.info.innerHTML += 
+    `<p class="my-0">Order N°${i}: ${self.data.lastPayload[i].side} (${self.data.lastPayload[i].quantity}) ${self.data.lastPayload[i].symbol} ${self.data.lastPayload[i].price ? self.data.lastPayload[i].price : "MARKET"} ${self.data.lastPayload[i].reduceOnly ? "[reduceOnly]" : ""}</p>`;
           }
         }
 
@@ -233,14 +235,19 @@ class makeTradeController {
 
 
           TheRequest.onload = () => {
-            self.formCard.info.innerHTML += `<p>TheRequest.responseText: ${TheRequest.responseText}</p>`;
             // inputMsg.innerHTML += '<p class="mt-0">Trade executed.</p>'
             // inputMsg.innerHTML += '<i class="fas demo-meta fa-6x text-danger fa-check"></i>'
+            self.formCard.info.innerHTML += "SENT";
+            self.formCard.info.innerHTML += '<i class="fas demo-meta fa-8x fa-check"></i>';
+            self.formCard.info.innerHTML += "SENT";
+            self.formCard.info.innerHTML += `<p>TheRequest.responseText: ${TheRequest.responseText}</p>`;
           };
           
           TheRequest.send();
 
-          self.formCard.info.innerHTML += `<p>tradePriceRequest.responseText: ${tradePriceRequest.responseText}</p>`;
+          // self.formCard.info.innerHTML += `<p>tradePriceRequest.responseText: ${tradePriceRequest.responseText}</p>`;
+
+          self.autoTrader = new AutoTrader({"lastArgument": "?",},{});
 
           // self.formCard.info.innerHTML = tradePriceRequest.responseText;
           // self.formCard.info.innerHTML += signedRequestUrl;
@@ -252,7 +259,8 @@ class makeTradeController {
         {
           tradePriceRequest.send();
         } else {
-          self.formCard.info.innerHTML += "NOT SEND NOT checked";
+          self.formCard.info.innerHTML += "NOT SEND";
+          self.formCard.info.innerHTML += '<i class="fas demo-meta fa-8x fa-times"></i>';
         }
 
         self.form.confirmTrade.checked = false;

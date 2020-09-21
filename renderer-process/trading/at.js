@@ -22,12 +22,45 @@ module.exports = class AutoTrader {
 				price : "/fapi/v1/ticker/bookTicker",
 				leverage : "/fapi/v1/leverage",
 				orders : "/fapi/v1/openOrders",
+				cancelRequest: "/fapi/v1/order",
 			},
 		};
 
 		this.keys = keySet.keySet();
 
 		this.theRequest = {};
+
+		this.requests = {
+			getCancelTradeRequest(orderId)
+			{
+				let exchange = "futures";
+				let baseUrl = self.urls[exchange].baseUrl;
+				let cancelRequestEndPoint = self.urls[exchange].cancelRequest;
+
+				let cancelRequestRequest = new XMLHttpRequest();	
+				let cancelRequestUrl = baseUrl + cancelRequestEndPoint + "?origClientOrderId="+ orderId;
+
+				let response = (response) =>{
+					alert("cancelRequestRequest");
+					return cancelRequestRequest.responseText;
+					// let newBaseUrl = self.urls[exchange].baseUrl;
+					// let endPoint = self.urls[exchange].batchOrder;
+
+					// let signedRequestUrl = self.signRequest(newBaseUrl, endPoint, dataQueryString);
+
+					// return {
+					// 	signedRequestUrl: signedRequestUrl,
+					// };
+				};
+
+				cancelRequestRequest.onload = response;
+				cancelRequestRequest.open("DELETE", cancelRequestUrl, true);
+				return {
+					cancelRequestUrl: cancelRequestUrl,
+					cancelRequestRequest: cancelRequestRequest,
+				};
+			},
+		};
 
 		this.options = Object.assign({
 		}, options);
@@ -170,6 +203,7 @@ module.exports = class AutoTrader {
 					priceRequest: priceRequest,
 				};
 			},
+
 
 		}
 
