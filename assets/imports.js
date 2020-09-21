@@ -5,12 +5,15 @@ var externalLinks = document.getElementsByClassName("open-externalLink");
 for (var i = 0; i < externalLinks.length; i++) {
 	externalLinks[i].addEventListener('click', (event) =>
    {
-        let win = new BrowserWindow({ width: 400, height: 320 })
-        win.on('close', () => { win = null })
-        // const modalPath = path.join('file://', __dirname, '../../sections/windows/modal.html')
-        // win.loadURL(modalPath)
-        win.loadURL(event.currentTarget.dataset.href)
-        win.show()
+     let settings = { width: 480, height: 768 };
+      if (!!event.currentTarget.dataset.width) { settings.width = parseInt(event.currentTarget.dataset.width) }
+      if (!!event.currentTarget.dataset.height) { settings.height = parseInt(event.currentTarget.dataset.height) }
+      let win = new BrowserWindow(settings);
+      win.on('close', () => { win = null })
+      // const modalPath = path.join('file://', __dirname, '../../sections/windows/modal.html')
+      // win.loadURL(modalPath)
+      win.loadURL(event.currentTarget.dataset.href)
+      win.show()
    });
 }
 
