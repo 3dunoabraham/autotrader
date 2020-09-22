@@ -40,6 +40,24 @@ class getOrdersController {
     };
     this.clickers =
     {
+      cancelAll(event = null)
+      {
+
+        let signedRequestUrl = self.autoTrader.order.cancelAllOrders("futures").signedRequestUrl;
+        self.$table.innerHTML = '<span class="col-xs-12 txt-center"><i class="fas transparentful demo-meta fa-8x fa-circle-notch  fa-spin"></i></span>';
+
+        let TheRequest = self.autoTrader.getTheRequest("delete", signedRequestUrl);
+
+        TheRequest.onload = () => {
+          let responseArray = JSON.parse(TheRequest.responseText);
+
+          self.$table.innerHTML = "";
+
+          self.autoTrader = new AutoTrader({"lastArgument": "?",},{});
+        };
+        
+        TheRequest.send();
+      },
       testEvent(event = null)
       {
         alert();

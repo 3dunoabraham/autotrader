@@ -23,6 +23,7 @@ module.exports = class AutoTrader {
 				leverage : "/fapi/v1/leverage",
 				orders : "/fapi/v1/openOrders",
 				cancelRequest: "/fapi/v1/order",
+				cancelAllOrders: "/fapi/v1/allOpenOrders",
 			},
 		};
 
@@ -108,6 +109,18 @@ module.exports = class AutoTrader {
 
 		this.order =
 		{
+			cancelAllOrders(exchange = "futures", symbol = "BTCUSDT")
+			{
+				let baseUrl = self.urls[exchange].baseUrl;
+				let ordersEndPoint = self.urls[exchange].cancelAllOrders;
+
+				let dataQueryString = `symbol=${symbol}`;
+				let signedRequestUrl = self.signRequest(baseUrl, ordersEndPoint, dataQueryString);
+
+				return {
+					signedRequestUrl: signedRequestUrl,
+				};
+			},
 			buy(exchange, symbol, quantity, price)
 			{
 				let baseUrl = self.urls[exchange].baseUrl;
