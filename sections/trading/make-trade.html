@@ -43,91 +43,70 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-xs-12 col-lg">
-            <h1>
-              <div class="demo-controls" style="display: flex; flex-direction: column; align-items: center; justify-content: center; ;">
-                <span class="" style="">Price</span>
-                <span class="demo-meta">Leave blank for market price.</span>
-
-                <div style="display:block; ; width: 75%; position: relative; position: relative" >
-                  <i class="fa fa-lg transparentful data-clicker fa-times" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); right: 20px"
+          <div class="col-xs-12 col-lg row">
+            <div class="col-xs-6">
+              <h1 class="demo-controls row middle-xs center-xs row-xs">
+                <span class="col-xs-12" style="">
+                  Price <br> <span class="demo-meta">Leave blank for market price.</span>
+                </span>
+                <div class="col-xs-12" style="position: relative;">
+                  <i class="fa fa-lg transparentful data-clicker fa-times" style="position: absolute; top: 50%; transform: translateY(-50%); right: 30px"
                   data-click="clearPriceInput"></i>
-                  <input type="text" name="tradePrice" id="input-tradePrice" class="demo-input inputGroup-input data-watcher" data-watch="priceChanged" style="flex: 1; width: 100%">
+                  <input type="text" name="tradePrice" id="input-tradePrice" class="demo-input inputGroup-input data-watcher w-100" data-watch="priceChanged">
                   <!-- <input type="text" name="trade-quantity" class="demo-input" style="flex: 1;"> -->
                 </div>
-                <span id="label-error-form-price" class="color-red demo-meta"></span>
+                <span id="label-error-form-price" class="color-red demo-meta col-xs-12"></span>
+              </h1>
+              <div class="demo-controls">
+                <input class="data-clicker" type="checkbox" data-click="makeTradeChange"  name="" checked id="trade-execute-makeTrade">
+                <label for="trade-execute-makeTrade">Make trade at price.</label>
               </div>
-            </h1>
-            <h1>
-              <div class="demo-controls row center-xs middle-xs">
-                <span class="col-xs-12" style="">Quantity</span>
+            </div>
+            <div class="col-xs-6">
+              <h1 class="demo-controls row center-xs middle-xs">
+                <span class="col-xs-12">
+                  Quantity <br> <span class="demo-meta">Change min and max in settings.</span>
+                </span>
                 <!-- <span class="demo-meta">Leave blank for $1.</span> -->
                 
-                <div class="col-xs-10 row middle-xs">
+                <div class="col-xs-12 row middle-xs">
                   <!-- <input type="checkbox" name="" checked id="trade-execute-makeTrade" class="col-xs-1 txt-right">
                   <label class="col-xs-2 demo-meta  txt-left ma-0" for="trade-execute-makeTrade">Make trade</label> -->
-                  <input type="range" min="1" max="10" step="1" class="col-xs-9 demo-input data-watcher" name="trade-quantity" id="input-tradeQuantity" data-watch="quantityChanged" value="1">
-                  <h3 id="label-error-form-quantity" class="demo-button col-xs txt-left color-gray border-gray ma-0">$1</h3>
-                </div>
-              </div>
-            </h1>
-            <div style="display: flex; flex-wrap: wrap;">
-              <button id="print-pdf-demo-toggle" class="js-container-target demo-toggle-button" style="flex: 1; ">
-                Settings
-                <div class="demo-meta u-avoid-clicks">Profit, Loss, Market | Current: [value]</div>
-              </button>
-              <div class="demo-box">
-                <!-- <p>Advanced <code>Settings</code></p> -->
-                <div class="demo-controls row">
-                  <input class="col-xs-1 data-watcher" type="checkbox" checked id="input-tradeHasProfit" data-watch="setHasProfit">
-                  <label class="col-xs" for="input-tradeHasProfit">Set profit</label>
-                  <h2 class="col-xs-2" id="label-error-form-profit">0.4</h2>
-                  <input class="col-xs demo-input data-watcher" data-watch="setProfit" type="range" min="0" max="2" step=".1" id="input-tradeProfit" value=".4" style="flex: 1; width: 100%">
-                </div>
-                <div class="demo-controls row">
-                  <input class="col-xs-1 data-watcher" type="checkbox" checked  disabled id="input-tradeHasLoss" data-watch="setHasLoss">
-                  <label class="col-xs" for="input-tradeHasLoss">Set loss</label>
-                  <h2 class="col-xs-2" id="label-error-form-loss">0.2</h2>
-                  <input class="col-xs demo-input data-watcher" data-watch="setLoss" type="range" min="0.1" max="2" step=".1" id="input-tradeLoss" value=".2" style="flex: 1; width: 100%">
-                </div>
-
-                <hr class="mb-2">
-                
-                <div class="demo-controls row">
-                  <input class="col-xs-1 data-clicker" type="checkbox" data-click="makeTradeChange"  name="" checked id="trade-execute-makeTrade">
-                  <label class="col-xs" for="trade-execute-makeTrade">Make trade at price.</label>
-                </div>
-                <div class="demo-controls row">
-                  <input class="col-xs-1" type="checkbox" name="" id="trade-execute-confirm">
-                  <label class="col-xs color-red" for="trade-execute-confirm">Check to confirm and send.</label>
-                </div>
-                <!-- <div class="demo-controls" style="display: flex; flex-direction: row; justify-content: flex-start;">
-                  <input type="checkbox" name="" checked id="trade-execute-withPNL">
-                  <label for="trade-execute-withPNL">Set profit and loss.</label>
-                </div>
-                <h3>
-                  <div class="demo-controls" style="display: flex; flex-direction: column; justify-content: center;">
-                    <span class="" style="">PNL</span>
-                    <div style="display:block; ; width: 75%; position: relative;" >
-                      <input type="text" value=".2:.1" name="tradePNL" id="input-tradePNL" class="demo-input inputGroup-input" style="flex: 1; width: 100%">
-                    </div>
+                  <div class="col-xs-6 px-0 mx-0">
+                    <input type="range" min="1" max="10" step="1" class="w-100 demo-input data-watcher" name="trade-quantity" id="input-tradeQuantity" data-watch="quantityChanged" value="1" >
                   </div>
-                </h3>
-                <hr> -->
-                <!-- <div class="demo-controls">
-                  <button class="demo-button" id="save-settings">Save</button>
-                  <span class="demo-response is-selectable" id="label-trade-msg"></span>
-                </div> -->
+                  <div class="col-xs-6 px-0 mx-0">
+                    <h3 id="label-error-form-quantity" class="demo-button txt-left color-gray border-gray ma-0">$1</h3>
+                  </div>
+                </div>
+              </h1>
+              <div class="row">
+                <div class="col-xs-12">
+
+                  <div class="demo-controls row middle-xs start-xs">
+                    <div class="col-xs-4 no-wrap">
+                      <input class="data-watcher" type="checkbox" checked id="input-tradeHasProfit" data-watch="setHasProfit">
+                      <label for="input-tradeHasProfit">Set Profit</label>
+                    </div>
+                    <h2 class="col-xs-2" id="label-error-form-profit">0.4</h2>
+                    <input class="col-xs demo-input data-watcher" data-watch="setProfit" type="range" min="0" max="2" step=".1" id="input-tradeProfit" value=".4" style="flex: 1; width: 100%">
+                  </div>
+                  <div class="demo-controls row middle-xs start-xs">
+                    <div class="col-xs-4 no-wrap">
+                      <input class="data-watcher" type="checkbox" checked id="input-tradeHasLoss" data-watch="setHasLoss">
+                      <label class="" for="input-tradeHasLoss">Set Loss</label>
+                    </div>
+                    <h2 class="col-xs-2" id="label-error-form-loss">0.2</h2>
+                    <input class="col-xs demo-input data-watcher" data-watch="setLoss" type="range" min="0" max="2" step=".1" id="input-tradeLoss" value=".2" style="flex: 1; width: 100%">
+                  </div>
+                
+                </div>
               </div>
             </div>
           </div>
 
           <div class="col-xs-12 col-lg-7">
-            <h1 class="mb-2">
-              <div class="demo-controls" style="display: flex; flex-direction: column; justify-content: center;">
-                <span class="">Result</span>
-              </div>
-            </h1>
+            <h1 class="ma-2"> Preview </h1>
             <div class="px-0">
               <div style="box-shadow:  0 -3px 6px 0px rgba(0,0,0,.075); padding: 30px">
                 <div class="row end-xs">
@@ -201,6 +180,10 @@
                     </div>
                   </h2>
               </div>
+              <h4 class="demo-controls">
+                <input type="checkbox" name="" id="trade-execute-confirm">
+                <label class="color-red" for="trade-execute-confirm">Check to confirm and send.</label>
+              </h4>
               <div class="mt-5 border-gold demo-button txt-center data-clicker" data-click="sendBatchOrder">send</div>
             </div>
           </div>
