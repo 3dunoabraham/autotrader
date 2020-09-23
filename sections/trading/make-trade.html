@@ -45,7 +45,7 @@
         <div class="row">
           <div class="col-xs-12 col-lg row">
             <div class="col-xs-6">
-              <h1 class="demo-controls row middle-xs center-xs row-xs">
+              <h3 class="demo-controls row middle-xs center-xs row-xs">
                 <span class="col-xs-12" style="">
                   Price <br> <span class="demo-meta">Leave blank for market price.</span>
                 </span>
@@ -56,14 +56,20 @@
                   <!-- <input type="text" name="trade-quantity" class="demo-input" style="flex: 1;"> -->
                 </div>
                 <span id="label-error-form-price" class="color-red demo-meta col-xs-12"></span>
-              </h1>
+                <span class="col-xs-12" style="">
+                  <div class="no-wrap data-clicker" data-side="buy" data-click="refreshPrice">
+                    <i class="fa fa-xs fa-sync-alt mr-1" id="refreshPrice-button"></i>
+                    <span>REFRESH PRICE</span>
+                  </div>
+                </span>
+              </h3>
               <div class="demo-controls">
                 <input class="data-clicker" type="checkbox" data-click="makeTradeChange"  name="" checked id="trade-execute-makeTrade">
                 <label for="trade-execute-makeTrade">Make trade at price.</label>
               </div>
             </div>
             <div class="col-xs-6">
-              <h1 class="demo-controls row center-xs middle-xs">
+              <h3 class="demo-controls row center-xs middle-xs">
                 <span class="col-xs-12">
                   Quantity <br> <span class="demo-meta">Change min and max in settings.</span>
                 </span>
@@ -79,38 +85,45 @@
                     <h3 id="label-error-form-quantity" class="demo-button txt-left color-gray border-gray ma-0">$1</h3>
                   </div>
                 </div>
-              </h1>
-              <div class="row">
-                <div class="col-xs-12">
-
-                  <div class="demo-controls row middle-xs start-xs">
-                    <div class="col-xs-4 no-wrap">
-                      <input class="data-watcher" type="checkbox" checked id="input-tradeHasProfit" data-watch="setHasProfit">
-                      <label for="input-tradeHasProfit">Set Profit</label>
-                    </div>
-                    <h2 class="col-xs-2" id="label-error-form-profit">0.4</h2>
-                    <input class="col-xs demo-input data-watcher" data-watch="setProfit" type="range" min="0" max="2" step=".1" id="input-tradeProfit" value=".4" style="flex: 1; width: 100%">
-                  </div>
-                  <div class="demo-controls row middle-xs start-xs">
-                    <div class="col-xs-4 no-wrap">
-                      <input class="data-watcher" type="checkbox" checked id="input-tradeHasLoss" data-watch="setHasLoss">
-                      <label class="" for="input-tradeHasLoss">Set Loss</label>
-                    </div>
-                    <h2 class="col-xs-2" id="label-error-form-loss">0.2</h2>
-                    <input class="col-xs demo-input data-watcher" data-watch="setLoss" type="range" min="0" max="2" step=".1" id="input-tradeLoss" value=".2" style="flex: 1; width: 100%">
-                  </div>
-                
+              </h3>
+              <div class="demo-controls row middle-xs start-xs">
+                <div class="col-xs-4 no-wrap pa-0 ma-0">
+                  <input class="data-watcher" type="checkbox" checked id="input-tradeHasProfit" data-watch="setHasProfit">
+                  <label for="input-tradeHasProfit">Set Profit</label>
+                </div>
+                <div class="col-xs-3 txt-center">
+                  <h2 id="label-error-form-profit">0.4</h2>
+                </div>
+                <div class="col-xs-5 pa-0 ma-0">
+                  <input class=" demo-input data-watcher w-100" data-watch="setProfit" type="range" min="0" max="2" step=".1" id="input-tradeProfit" value=".4">
                 </div>
               </div>
+              <div class="demo-controls row middle-xs start-xs">
+                <div class="col-xs-4 no-wrap pa-0 ma-0">
+                  <input class="data-watcher" type="checkbox" checked id="input-tradeHasLoss" data-watch="setHasLoss">
+                  <label class="" for="input-tradeHasLoss">Set Loss</label>
+                </div>
+                <div class="col-xs-3 txt-center">
+                  <h2 id="label-error-form-loss">0.2</h2>
+                </div>
+                <div class="col-xs-5 pa-0 ma-0">
+                  <input class="demo-input data-watcher w-100" data-watch="setLoss" type="range" min="0" max="2" step=".1" id="input-tradeLoss" value=".2" >
+                </div>
+              </div>
+                
             </div>
           </div>
 
           <div class="col-xs-12 col-lg-7">
-            <h1 class="ma-2"> Preview </h1>
+            <h3 class="ma-2 mt-0"> Preview </h3>
             <div class="px-0">
               <div style="box-shadow:  0 -3px 6px 0px rgba(0,0,0,.075); padding: 30px">
                 <div class="row end-xs">
                   <span class="col-xs">
+                      <!-- <div class="col-xs demo-meta no-wrap data-clicker" data-side="buy" data-click="refreshPrice">
+                        <i class="fa fa-xs fa-sync-alt mr-1" id="refreshPrice-button"></i>
+                        <span>Refresh Price</span>
+                      </div> -->
                       <span class="col-xs demo-meta">price: <b id="card-label-price"></b></span>
                       <span class="col-xs demo-meta">
                         <span class="pr-1">quantity:</span> $<b id="card-label-balance" class="pr-1"></b>
@@ -160,20 +173,20 @@
                 </span>
                 <span style="background: red" id="trade-orders-msg"></span> -->
               </div>
-              <div class="row center-xs">
-                  <h2 class="col-6">
-                    <div class="demo-button color-gray border-gray no-wrap data-clicker" data-side="buy" data-click="refreshPrice">
+              <div class="row center-xs" >
+                  <!-- <div class="col-xs-12 row start-xs">
+                    <div class="no-wrap data-clicker" data-side="buy" data-click="refreshPrice">
                       <i class="fa fa-xs fa-sync-alt mr-1" id="refreshPrice-button"></i>
                       <span>REFRESH PRICE</span>
                     </div>
-                  </h2>
-                  <h2 class="col-6">
+                  </div> -->
+                  <h2 >
                     <div class="demo-button color-green border-green no-wrap data-clicker" id="trade-execute-buy" data-side="buy" data-click="setSide">
                       <i class="fa fa-xs fa-arrow-up mr-1"></i>
                       <span>Buy</span>
                     </div>
                   </h2>
-                  <h2 class="col-6">
+                  <h2 >
                     <div class="demo-button color-red border-red no-wrap data-clicker" id="trade-execute-sell" data-side="sell" data-click="setSide">
                       <i class="fa fa-xs fa-arrow-down mr-1"></i>
                       <span>Sell</span>
