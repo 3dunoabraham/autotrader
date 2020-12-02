@@ -32,7 +32,7 @@
   "author": "GitHub",
   "license": "MIT",
   "devDependencies": {
-    "@octokit/rest": "^16.3.2",
+    "@octokit/rest": "^16.43.2",
     "chai": "^3.4.1",
     "chai-as-promised": "^6.0.0",
     "check-for-leaks": "^1.2.1",
@@ -42,21 +42,22 @@
     "husky": "^0.14.3",
     "mocha": "^5.2.0",
     "npm-run-all": "^4.0.2",
-    "request": "^2.70.0",
-    "rimraf": "^2.5.2",
+    "request": "^2.88.2",
+    "rimraf": "^2.7.1",
     "signcode": "^0.5.0",
     "spectron": "^5.0.0",
     "standard": "^8.2.0",
-    "tap": "^14.10.6"
+    "tap": "^14.11.0"
   },
   "dependencies": {
-    "electron": "^7.2.4",
+    "crypto": "^1.0.1",
+    "electron": "^7.3.3",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.0.7",
     "electron-shortcut-normalizer": "^1.0.0",
-    "glob": "^7.1.0",
-    "highlight.js": "^9.3.0",
-    "update-electron-app": "^1.1.1",
+    "glob": "^7.1.6",
+    "highlight.js": "^9.18.5",
+    "update-electron-app": "^1.5.0",
     "xmlhttprequest": "^1.8.0"
   },
   "standard": {

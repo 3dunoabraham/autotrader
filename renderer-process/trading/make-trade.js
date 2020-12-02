@@ -295,6 +295,7 @@ class makeTradeController {
         let localOnloadReponse = localPriceRequest.onload;
 
         let response = () => {
+          console.log(`Network response`);
           let bidPrice = JSON.parse(localPriceRequest.responseText).bidPrice;
 
           self.data.lastPrice[self.form.symbol] = bidPrice;
@@ -307,10 +308,19 @@ class makeTradeController {
         };
 
         localPriceRequest.onload = response;
+        localPriceRequest.onprogress = (event)=> { 
+          console.log(`Received ${event.loaded} of ${event.total}`)
+        };
+        localPriceRequest.onerror = () =>{
+          console.log(`Network Error`);
+        };
 
         localPriceRequest.send();
 
-        self.updaters.cardTrade();
+        // alert(response)
+        console.log("localPriceRequest sent")
+        
+        // self.updaters.cardTrade();
       },
       setSide(event = null)
       {
@@ -332,7 +342,7 @@ class makeTradeController {
     };
 
     this.initListeners();
-    this.clickers.setToken({currentTarget:{dataset:{token: "btc"}}});
+    // this.clickers.setToken({currentTarget:{dataset:{token: "btc"}}});
   }
   initListeners()
   {
@@ -354,7 +364,8 @@ class makeTradeController {
     }
   }
   validateForm()
-  {}
+  {
+  }
 }
 
 
